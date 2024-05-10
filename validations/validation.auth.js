@@ -1,16 +1,18 @@
 const Joi = require('joi');
 
-exports.login = async (login) => {
+exports.validateLogin = (login) => {
 
     const schema = Joi.object({
         login: Joi.string()
         .alphanum()
-        .min(8)
-        .max(10)
+        .min(4)
+        .max(6)
         .required(),
 
         password: Joi.string()
-        .pattern(new RegExp('^[a-zA-Z0-9]{8,10}$'))
+        .alphanum()
+        .min(8)
+        .max(10)
         .required(),
     });
 

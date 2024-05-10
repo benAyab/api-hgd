@@ -16,6 +16,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "joi": "^17.13.1",
+    "jsonwebtoken": "^9.0.2",
     "oracledb": "^6.5.0",
     "pdfmake": "^0.2.10"
   },

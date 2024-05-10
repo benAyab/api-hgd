@@ -8,10 +8,12 @@ require('dotenv').config();
 
 const bodyParser = require('body-parser');
 
+const router = require('./routes/routes')
+
 const app = express();
 
-
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({
     secret: process.env.SESSION_KEY,
@@ -19,7 +21,7 @@ app.use(session({
     store: new LokiStore({path: './sessions/session.db'}),
     saveUninitialized: true,
     cookie: {
-        maxAge: 1000 * 60
+        maxAge: 1000 * 3600
     }
 }));
 
@@ -31,14 +33,16 @@ app.use(function(req, res, next){
 });
 
 app.get('/', (req, res) =>{
-    req.session.test = 'DATA_TEST';
+    //req.session.test = 'DATA_TEST';
     res.send('Salut !')
 });
 
 app.get('/logout', (req, res) => {
-    req.session.test = null;
+    //req.session.test = null;
     res.send('Your logged out !')
-})
+});
+
+app.use('/api', router);
 
 app.use((req, res, next) => {
     res.status(404).json({error: 'BAD_METHOD_OR_NOT_FOUND', message: "NOT FOUND"})
