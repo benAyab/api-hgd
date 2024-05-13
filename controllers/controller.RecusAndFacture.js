@@ -12,9 +12,13 @@ exports.getFactureDetail = async (req, res) =>{
 
         //TODO 
         //fecth dossier and return if exist
-        const detail_dossier_and_patient_query = `SELECT numdos, catdos, dateeh, datresh, nompat, prepat
+        const detail_dossier_and_patient_query = `SELECT ghdossier.numdos, ghdossier.catdos, ghdossier.dateeh, ghdossier.datresh, ghdossier.nompat, ghdossier.prepat
         FROM ghdossier
         INNER JOIN `
+
+        const d = new Date();
+        console.log("Local date String: ", d.toLocaleDateString())
+        console.log("Local  String: ", d.toLocaleString())
 
         await generateFacture();
         await generateRcus();
