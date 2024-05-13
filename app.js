@@ -1,9 +1,5 @@
 var express = require('express');
 
-const session = require('express-session');
-
-const LokiStore = require('connect-loki')(session);
-
 require('dotenv').config();
 
 const bodyParser = require('body-parser');
@@ -15,15 +11,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(session({
-    secret: process.env.SESSION_KEY,
-    resave: false,
-    store: new LokiStore({path: './sessions/session.db'}),
-    saveUninitialized: true,
-    cookie: {
-        maxAge: 1000 * 3600
-    }
-}));
 
 app.use(function(req, res, next){
     res.setHeader("Access-Control-Allow-Origine", "*");
