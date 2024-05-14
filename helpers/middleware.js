@@ -3,11 +3,13 @@ const jwtUtils = require("./helper.jsonwebtoken");
 
 exports.isAuthenticated = async(req, res, next) =>{
   try {
-    const authToken = req.get("Authorization");
+    const rawauthToken = req.get("Authorization");
 
-    if (!authToken){
+    if (!rawauthToken){
       return res.status(400).json({error: "INVALID_HEADERS", message: "Missing or invalid auth header"})
     }
+
+    const authToken = rawauthToken.split(" ")[1];
 
     const decodedToken = jwtUtils.verifyAndDecodeToken(authToken);
 

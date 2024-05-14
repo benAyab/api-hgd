@@ -11,9 +11,8 @@ exports.auth = async (req, res) =>{
     let connection;
 
     try {
-
         if(!req.body.login || !req.body.password){
-            return res.status(400).json({error: 'BAD_REQUEST_OR_SYNTAX', message: "Missing login or password key in request"})
+            return res.status(400).json({error: 'BAD_REQUEST_OR_SYNTAX', message: "Missing login or password key in request"});
         }
 
         const login = req.body.login;
@@ -24,20 +23,19 @@ exports.auth = async (req, res) =>{
         if(validationResult.error){
             return res.status(400).json({error: 'INVALID_PARAM', message: "Missing user code or password"})
         }
-        /* after validation, now open connection to database
+        // after validation, now open connection to database
+        oracledb.initOracleClient();
         connection = await oracledb.getConnection(dbConfig);
 
-        const sql = `SELECT login, password FROM adduser WHERE login = :logid`
+        const sql = `SELECT login, password FROM adduser`;
 
         const result = await connection.execute(sql,
-            [logid],
+            [],
             { outFormat: oracledb.OUT_FORMAT_OBJECT}  // object format
         );
         
         console.log(result.rows);  // print all returned rows
-        */
         
-
         const jwtToken = jwtUtils.generateToken({ login });
 
         const data = {
@@ -45,13 +43,13 @@ exports.auth = async (req, res) =>{
             expire: 3600,
             expire_date: new Date(Date.now() + 3600_000)
         }
+        await connection.close();
 
         return res.status(200).json({ data });
 
         // TODO 
         // Write request to fecth data from db
         // Test pasword, set cookie session
-        // await connection.close();
 
     } catch (error) {
         if(process.env.CONTEXT_EXEC === 'development'){

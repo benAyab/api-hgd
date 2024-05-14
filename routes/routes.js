@@ -10,7 +10,8 @@ const { isAuthenticated } = require('../helpers/middleware');
 Router.post('/v1/user/login', userController.auth);
 
 Router.post('/v1/payment/init', isAuthenticated, paymentController.initPayment);
+Router.post('/v1/payment/checkStatus', isAuthenticated, paymentController.checkStatus);
 
-Router.post('/v1/dossier/printRecus/:numDossier',  recusFactureController.getFactureDetail);
+Router.post('/v1/dossier/printRecus/:numDossier', isAuthenticated, recusFactureController.getFactureDetail);
 
 module.exports = Router;

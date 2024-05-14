@@ -112,3 +112,26 @@ exports.makePayment = async (infos = {}, accesToken = "") =>{
         throw new Error(error.message);
     }
 }
+
+exports.getStatus = async (data = {}) => {
+    if(!data || !data.meanCode || !data.adpFootprint){
+        throw new Error("Invalid data params for get-status")
+    }
+
+    const ADWAPAY_URL = process.env.ADWAPAY_BASE_URL;
+
+    const response = await axios.post(`${ADWAPAY_URL}/paymentStatus`, 
+        {
+            adpFootprint: data.adpFootprint,
+            meanCode: data.meanCode
+        },
+        {
+            headers: {
+                "AUTH-API-SUBSCRIPTION": process.env.ADWAPAY_SUBSCRIPTION,
+                "AUTH-API-TOKEN": `Bearer ${accesToken}`,
+                "Content-Type": "application/json"
+            }
+        }
+    );
+    return response;
+}
