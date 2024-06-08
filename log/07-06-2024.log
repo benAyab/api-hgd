@@ -1,0 +1,235 @@
+09:25:03 [info] Initialisation connexion par le code utilisateur: OBHH  IP_ADDRESS: ::ffff:192.168.1.11
+09:25:03 [info] Utilisateur connecté
+09:26:37 [error] jwt expired
+09:29:38 [info] Initialisation connexion par le code utilisateur: OBHH  IP_ADDRESS: ::ffff:192.168.1.16
+09:30:16 [info] Initialisation connexion par le code utilisateur: OBFF  IP_ADDRESS: ::ffff:192.168.1.16
+09:30:16 [info] Utilisateur connecté
+09:30:54 [info] Récupération détail dossier No: 3000006
+09:30:54 [info] Récupération détail dossier No: 3000006
+09:31:01 [info] Récupération détail dossier No: 3000006
+09:31:25 [info] Récupération détail dossier No: 3000006
+09:31:25 [info] Initialisation de payement...
+09:31:30 [info] Payement initié
+09:53:34 [info] Déconnexion de l'utilisateur: OBHH
+09:53:34 [info] Utilisateur: OBHH déconnecté
+09:54:17 [info] Initialisation connexion par le code utilisateur: OBHH  IP_ADDRESS: ::ffff:192.168.1.11
+09:54:18 [info] Utilisateur connecté
+09:54:44 [info] Déconnexion de l'utilisateur: OBHH
+09:54:44 [info] Utilisateur: OBHH déconnecté
+09:54:50 [info] Récupération détail dossier No: 3000007
+09:54:50 [info] Récupération détail dossier No: 3000007
+09:54:55 [info] Initialisation connexion par le code utilisateur: OBHH  IP_ADDRESS: ::ffff:192.168.1.11
+09:54:55 [info] Utilisateur connecté
+09:54:59 [info] Récupération détail dossier No: 3000007
+09:55:38 [info] Récupération détail dossier No: 3000007
+09:55:38 [info] Initialisation de payement...
+09:55:42 [info] Payement initié
+09:55:55 [info] Récupération détail dossier No: 3000008
+09:55:55 [info] Récupération détail dossier No: 3000008
+09:55:58 [info] Payement confirmé
+09:55:58 [info] Récupération détail dossier No: 3000007
+09:55:58 [info] Récupération détail dossier No: 3000007
+09:55:59 [info] Récupération détail dossier No: 3000008
+09:56:06 [info] génération de reçu...
+09:56:06 [info] Reçu généré avec le numéro: 2952734
+09:56:13 [info] Récupération détail dossier No: 3000008
+09:56:13 [info] Initialisation de payement...
+09:56:17 [info] Payement initié
+09:56:28 [info] Payement confirmé
+09:56:28 [info] Récupération détail dossier No: 3000008
+09:56:28 [info] Récupération détail dossier No: 3000008
+09:57:11 [info] génération de reçu...
+09:57:11 [info] Reçu généré avec le numéro: 2952735
+10:03:30 [info] Récupération détail dossier No: 3000008
+10:03:30 [info] Récupération détail dossier No: 3000008
+10:44:38 [info] Initialisation connexion par le code utilisateur: OBSD  IP_ADDRESS: ::1
+10:44:38 [info] Utilisateur connecté
+10:45:11 [info] Initialisation de payement...
+10:45:15 [info] Payement initié
+10:48:43 [info] Initialisation de payement...
+10:48:47 [info] Payement initié
+10:49:15 [error] Echec de payement. Raison:  Status: C
+10:52:42 [info] Initialisation connexion par le code utilisateur: OBSD  IP_ADDRESS: ::1
+10:53:25 [info] Déconnexion de l'utilisateur: OBSD
+10:53:25 [info] Utilisateur: OBSD déconnecté
+11:02:19 [error] Echec de payement. Raison:  Status: O
+11:08:51 [info] Initialisation connexion par le code utilisateur: OBHH  IP_ADDRESS: ::ffff:192.168.1.11
+11:08:51 [info] Utilisateur connecté
+12:04:55 [error] jwt expired
+12:05:01 [info] Initialisation connexion par le code utilisateur: OBSD  IP_ADDRESS: ::1
+12:05:01 [info] Utilisateur connecté
+12:05:14 [error] jwt expired
+12:08:12 [info] Récupération détail dossier No: 3000001
+12:09:48 [info] Récupération détail dossier No: 3000001
+12:10:28 [error] jwt expired
+12:10:44 [info] Initialisation de payement...
+12:10:48 [info] Payement initié
+12:11:09 [info] Payement confirmé
+12:11:34 [info] Récupération détail dossier No: 3000001
+12:15:35 [info] Récupération détail dossier No: 3000001
+12:15:48 [info] Initialisation de payement...
+12:15:53 [info] Payement initié
+12:16:04 [info] Payement confirmé
+12:16:19 [info] Récupération détail dossier No: 3000001
+12:49:00 [info] Initialisation connexion par le code utilisateur: OBHH  IP_ADDRESS: ::ffff:192.168.1.11
+12:49:01 [info] Utilisateur connecté
+13:04:25 [info] Récupération détail dossier No: 3000008
+13:04:25 [info] Récupération détail dossier No: 3000008
+13:04:57 [info] Récupération détail dossier No: 3000008
+13:04:57 [info] Récupération détail dossier No: 3000008
+13:06:09 [info] Récupération détail dossier No: 3000008
+13:06:47 [info] Récupération détail dossier No: 3000008
+13:07:36 [info] Récupération détail dossier No: 3000008
+13:09:36 [info] Récupération détail dossier No: 3000008
+13:11:19 [info] Déconnexion de l'utilisateur: OBHH
+13:11:19 [info] Utilisateur: OBHH déconnecté
+13:12:15 [info] Initialisation connexion par le code utilisateur: OBHH  IP_ADDRESS: ::ffff:192.168.1.11
+13:12:15 [info] Utilisateur connecté
+13:12:25 [info] Récupération détail dossier No: 3000008
+13:12:25 [info] Récupération détail dossier No: 3000008
+13:12:27 [info] Récupération détail dossier No: 3000008
+13:12:41 [info] Récupération détail dossier No: 3000008
+13:12:41 [info] Initialisation de payement...
+13:12:46 [info] Payement initié
+13:13:02 [info] Payement confirmé
+13:13:02 [info] Récupération détail dossier No: 3000008
+13:13:02 [info] Récupération détail dossier No: 3000008
+13:13:06 [info] génération de reçu...
+13:13:06 [info] Reçu généré avec le numéro: 2952725
+13:13:27 [info] Déconnexion de l'utilisateur: OBHH
+13:13:27 [info] Utilisateur: OBHH déconnecté
+13:13:39 [info] Initialisation connexion par le code utilisateur: OBHH  IP_ADDRESS: ::ffff:192.168.1.11
+13:13:39 [info] Utilisateur connecté
+13:13:45 [info] génération de reçu...
+13:13:45 [info] Reçu généré avec le numéro: 2952725
+13:14:04 [info] Déconnexion de l'utilisateur: OBHH
+13:14:04 [info] Utilisateur: OBHH déconnecté
+13:20:11 [info] Initialisation connexion par le code utilisateur: OBHH  IP_ADDRESS: ::ffff:192.168.1.11
+13:20:11 [info] Utilisateur connecté
+13:29:46 [info] Récupération détail dossier No: 3000008
+13:29:46 [info] Récupération détail dossier No: 3000008
+13:30:17 [info] Récupération détail dossier No: 3000008
+13:30:17 [info] Récupération détail dossier No: 3000008
+13:30:44 [info] Récupération détail dossier No: 3000008
+13:30:44 [info] Récupération détail dossier No: 3000008
+13:31:07 [info] Récupération détail dossier No: 3000008
+13:31:07 [info] Récupération détail dossier No: 3000008
+13:32:07 [info] Récupération détail dossier No: 3000008
+13:32:24 [info] Récupération détail dossier No: 3000008
+13:32:26 [info] Récupération détail dossier No: 3000008
+13:32:37 [info] Récupération détail dossier No: 3000008
+13:32:49 [info] Récupération détail dossier No: 3000008
+16:37:38 [info] Initialisation connexion par le code utilisateur: OBSD  IP_ADDRESS: ::1
+16:37:39 [info] Utilisateur connecté
+16:38:25 Echec de récupération des détails sur le dossier
+16:43:14 [info] Récupération détail dossier No: 3000001
+16:43:23 [info] Récupération détail dossier No: 3000002
+16:43:57 [info] Initialisation de payement...
+16:44:02 [info] Payement initié
+16:45:01 [error] read ECONNRESET
+16:48:23 [info] Initialisation de payement...
+16:48:27 [info] Payement initié
+16:55:21 [info] Déconnexion de l'utilisateur: OBHH
+16:55:21 [info] Utilisateur: OBHH déconnecté
+16:55:39 [info] Initialisation connexion par le code utilisateur: OBHH  IP_ADDRESS: ::ffff:192.168.1.11
+16:55:40 [info] Utilisateur connecté
+16:55:44 [info] Récupération détail dossier No: 3000008
+16:55:44 [info] Récupération détail dossier No: 3000008
+16:56:14 [info] Récupération détail dossier No: 3000008
+16:56:14 [info] Récupération détail dossier No: 3000008
+16:56:17 [info] Récupération détail dossier No: 3000001
+16:56:17 [info] Récupération détail dossier No: 3000001
+16:56:20 [info] Récupération détail dossier No: 3000001
+16:56:27 [info] Récupération détail dossier No: 3000001
+16:56:27 [info] Initialisation de payement...
+16:56:31 [info] Payement initié
+16:56:36 [error] socket hang up
+16:57:58 [info] Initialisation connexion par le code utilisateur: OBHH  IP_ADDRESS: ::ffff:192.168.1.11
+16:57:58 [info] Utilisateur connecté
+16:58:08 [info] Récupération détail dossier No: 3000001
+16:58:08 [info] Récupération détail dossier No: 3000001
+16:58:10 [info] Récupération détail dossier No: 3000001
+16:58:23 [info] Récupération détail dossier No: 3000001
+16:58:23 [info] Récupération détail dossier No: 3000001
+16:58:24 [info] Récupération détail dossier No: 3000001
+16:58:31 [info] Récupération détail dossier No: 3000001
+16:58:31 [info] Initialisation de payement...
+16:58:37 [info] Payement initié
+16:58:53 [info] Payement confirmé
+16:58:53 [info] Récupération détail dossier No: 3000001
+16:58:53 [info] Récupération détail dossier No: 3000001
+16:59:39 [info] Récupération détail dossier No: 3000001
+16:59:39 [info] Récupération détail dossier No: 3000001
+16:59:41 [info] Récupération détail dossier No: 3000001
+16:59:48 [info] Récupération détail dossier No: 3000001
+16:59:48 [info] Initialisation de payement...
+16:59:53 [info] Payement initié
+17:00:10 [info] Payement confirmé
+17:00:10 [info] Récupération détail dossier No: 3000001
+17:00:10 [info] Récupération détail dossier No: 3000001
+17:10:21 [info] Initialisation connexion par le code utilisateur: NGON  IP_ADDRESS: ::ffff:192.168.1.11
+17:10:21 [info] Utilisateur connecté
+17:11:52 [info] Initialisation connexion par le code utilisateur: NGON  IP_ADDRESS: ::ffff:192.168.1.11
+17:12:07 [info] Initialisation connexion par le code utilisateur: OBFF  IP_ADDRESS: ::ffff:192.168.1.11
+17:12:07 [info] Utilisateur connecté
+17:16:51 [info] Récupération détail dossier No: 3000001
+17:17:58 [info] Initialisation connexion par le code utilisateur: OBFF  IP_ADDRESS: ::ffff:192.168.1.11
+17:17:58 [info] Utilisateur connecté
+17:18:02 [info] Récupération détail dossier No: 3000002
+17:18:08 [info] Récupération détail dossier No: 3000001
+17:18:15 [info] Récupération détail dossier No: 3000001
+17:18:15 [info] Récupération détail dossier No: 3000001
+17:18:18 [info] Récupération détail dossier No: 3000001
+17:18:57 [info] Récupération détail dossier No: 3000001
+17:18:57 [info] Récupération détail dossier No: 3000001
+17:19:29 [info] Récupération détail dossier No: 3000001
+17:22:08 [info] Récupération détail dossier No: 3000001
+17:22:14 [info] Récupération détail dossier No: 3000001
+18:06:11 [info] Initialisation connexion par le code utilisateur: OBFF  IP_ADDRESS: ::ffff:192.168.1.11
+18:06:11 [info] Utilisateur connecté
+18:11:20 [info] Récupération détail dossier No: 3000001
+18:11:34 [info] Initialisation connexion par le code utilisateur: OBHH  IP_ADDRESS: ::ffff:192.168.1.11
+18:11:34 [info] Utilisateur connecté
+18:11:38 [info] Récupération détail dossier No: 3000001
+18:11:38 [info] Récupération détail dossier No: 3000001
+18:11:46 [info] Récupération détail dossier No: 3000001
+18:11:52 [info] Récupération détail dossier No: 3000001
+18:11:52 [info] Initialisation de payement...
+18:11:56 [info] Payement initié
+18:12:08 [info] Payement confirmé
+18:12:08 [info] Récupération détail dossier No: 3000001
+18:12:08 [info] Récupération détail dossier No: 3000001
+18:12:25 [info] Récupération détail dossier No: 3000001
+18:12:47 [info] Récupération détail dossier No: 3000001
+18:13:28 [info] Récupération détail dossier No: 3000001
+18:14:04 [info] Récupération détail dossier No: 3000006
+18:14:05 [info] Récupération détail dossier No: 3000006
+18:14:06 [info] Récupération détail dossier No: 3000006
+18:14:12 [info] Récupération détail dossier No: 3000006
+18:14:13 [info] Initialisation de payement...
+18:14:17 [info] Payement initié
+18:14:32 [info] Payement confirmé
+18:14:32 [info] Récupération détail dossier No: 3000006
+18:14:32 [info] Récupération détail dossier No: 3000006
+18:14:38 [info] Récupération détail dossier No: 3000006
+18:14:39 [info] Récupération détail dossier No: 3000006
+18:14:41 [error] jwt expired
+18:14:46 [info] Initialisation connexion par le code utilisateur: OBSD  IP_ADDRESS: ::1
+18:14:46 [info] Utilisateur connecté
+18:15:41 [info] Récupération détail dossier No: 3000006
+18:16:56 [info] Récupération détail dossier No: 3000006
+18:16:57 [info] Récupération détail dossier No: 3000006
+18:17:11 [info] Récupération détail dossier No: 3000006
+18:17:25 [info] Initialisation de payement...
+18:17:31 [info] Payement initié
+18:17:51 [info] Récupération détail dossier No: 3000006
+18:17:51 [info] Initialisation de payement...
+18:17:56 [info] Payement initié
+18:18:05 [error] getaddrinfo ENOTFOUND twsv03.adwapay.com
+18:18:36 [info] Initialisation de payement...
+18:18:40 [info] Payement initié
+18:19:18 [info] Récupération détail dossier No: 3000006
+18:19:40 [info] Récupération détail dossier No: 3000006
+18:19:40 [info] Récupération détail dossier No: 3000006
+18:19:47 [info] Récupération détail dossier No: 3000001
+18:19:47 [info] Récupération détail dossier No: 3000001

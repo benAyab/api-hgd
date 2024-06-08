@@ -1,7 +1,9 @@
 node_modules/
 
 sessions/
-
-.env
-
-scratch.txt
+*.pem
+*.env
+*.txt
+*.log
+*.crypt
+*.crypt.sign

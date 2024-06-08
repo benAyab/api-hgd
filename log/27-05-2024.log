@@ -1,0 +1,4 @@
+13:50:16 [info] Initialisation connexion par le code utilisateur: OBSD
+13:50:37 [error] ORA-12170: TNS:Connect timeout occurred
+13:51:15 [info] Initialisation connexion par le code utilisateur: OBSD
+13:51:36 [error] ORA-12170: TNS:Connect timeout occurred

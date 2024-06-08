@@ -1,0 +1,41 @@
+11:46:49 [info] Initialisation connexion par le code utilisateur: OBHH  IP_ADDRESS: ::ffff:192.168.1.11
+11:46:49 [info] Utilisateur connecté
+12:19:48 [info] Initialisation connexion par le code utilisateur: OBSD  IP_ADDRESS: ::ffff:127.0.0.1
+12:19:48 [info] Utilisateur connecté
+12:20:16 [info] Initialisation de payement...
+12:20:21 [info] Payement initié
+12:20:32 [info] Payement confirmé
+17:08:10 [info] Initialisation connexion par le code utilisateur: OBSD  IP_ADDRESS: ::ffff:127.0.0.1
+17:08:10 [info] Utilisateur connecté
+17:08:41 [info] Initialisation de payement...
+17:08:45 [info] Payement initié
+17:09:01 [info] Payement confirmé
+17:14:25 [info] Initialisation de payement...
+17:14:30 [info] Payement initié
+17:14:40 [info] Payement confirmé
+17:17:02 [info] Initialisation de payement...
+17:17:07 [info] Payement initié
+17:17:18 [info] Payement confirmé
+17:19:27 [info] Initialisation de payement...
+17:19:31 [info] Payement initié
+17:19:41 [info] Payement confirmé
+17:32:14 [info] Initialisation de payement...
+17:32:19 [info] Payement initié
+17:32:30 [info] Payement confirmé
+17:33:11 [info] Initialisation de payement...
+17:33:16 [info] Payement initié
+17:33:26 [error] Echec de payement. Raison:  Status: C
+18:23:00 [info] Initialisation connexion par le code utilisateur: OBSD  IP_ADDRESS: ::ffff:127.0.0.1
+18:23:00 [info] Utilisateur connecté
+18:23:28 [info] Initialisation de payement...
+18:23:32 [info] Payement initié
+18:23:43 [info] Payement confirmé
+18:25:45 [info] Initialisation de payement...
+18:25:49 [info] Payement initié
+18:26:00 [info] Payement confirmé
+18:29:38 [info] Initialisation de payement...
+18:29:44 [info] Payement initié
+18:29:54 [error] Echec de payement. Raison:  Status: C
+18:39:25 [info] Initialisation de payement...
+18:39:30 [info] Payement initié
+18:39:45 [error] Echec de payement. Raison:  Status: C

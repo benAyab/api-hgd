@@ -4,7 +4,6 @@ exports.validateLogin = (login) => {
 
     const schema = Joi.object({
         login: Joi.string()
-        .alphanum()
         .min(4)
         .max(6)
         .required(),

@@ -1,10 +1,14 @@
 'use strict';
 
 const PdfPrinter = require('pdfmake');
-const fs = require("fs");
+const Utils = require("../helpers/utils");
 
 const path = require("path");
 
+// generate pdf document 
+// Input: an object @data with keys 
+// Output: if success: pdfDocument object [@Readatable stream] 
+//  else: throw an error 
 const generateFacture = async (data = {}) =>{
     try {
         const fonts = {
@@ -16,109 +20,29 @@ const generateFacture = async (data = {}) =>{
             }
         };
         
+        //instanciate a new PdfPrinter to hold our future document
         const printer = new PdfPrinter(fonts)
         const docDefinition = {
+            background: [ 
+                {
+                    image: `${path.join(path.resolve('assets'), 'images', 'hgd-background.png')}`,
+                    width: 200,
+                    opacity: 0.5,
+                    absolutePosition: { x: 80, y: 50 }
+                }
+            ],
             content: [
                 {
                     table: {
-                        body: [
-                            [
-                                {
-                                    text: 'HOPITAL  GENERAL  DE  DOUALA',
-                                    fontSize: 13,
-                                    colSpan: 3,
-                                    border: [true, true, true, false]
-                                },
-                                {}, 
-                                {},
-                                {
-                                    text: `NOM PATIENT`,
-                                    fontSize: 13,
-                                    colSpan: 3,
-                                    rowSpan: 2,
-                                    border: [true, true, true, true]
-                                },
-                                {},
-                                {},
-                                
-                            ],
-                            [
-                                {
-                                    text: 'BP: 4856  DOUALA, CAMEROUN',
-                                    fontSize: 13,
-                                    colSpan: 3,
-                                    border: [true, false, false, true]
-                                }, {}, {}, {}, {}, {}
-                            ],
-                            [
-                                {
-                                    text: `Facture du \t DD/MM/YYYY`,
-                                    fontSize: 13,
-                                    colSpan: 3,
-                                    border: [true, true, false, true]
-                                }, {}, {},
-                                {
-                                    text: ` A  HH:MM:SS`,
-                                    fontSize: 13,
-                                    colSpan: 3,
-                                    border: [false, true, true, true]
-                                }, {}, {}
-                            ],
-                            [
-                                {
-                                    text: `D0SSIER No: `,
-                                    fontSize: 13,
-                                    colSpan: 2,
-                                    border: [true, true, false, true]
-                                },
-                                {},
-                                {
-                                    text: `XXXXXXXXX`,
-                                    fontSize: 13,
-                                    alignment: 'left',
-                                    colSpan: 4,
-                                    border: [false, true, true, true]
-                                }, {}, {}, {}
-                            ],
-                            [
-                                {
-                                    text: `Entré(e) le \t DD/MM/YYYY`,
-                                    fontSize: 13,
-                                    colSpan: 3,
-                                    border: [true, true, false, true]
-                                }, {}, {},
-                                {
-                                    text: `Sorti(e) le \t DD/MM/YYYY`,
-                                    fontSize: 13,
-                                    alignment: 'left',
-                                    colSpan: 3,
-                                    border: [false, true, true, true]
-                                }, {}, {}
-                            ],
-                            [
-                                {
-                                    text: `MEDECIN `,
-                                    fontSize: 13,
-                                    colSpan: 2,
-                                    border: [true, true, false, false]
-                                }, {},
-                                {
-                                    text: `\t SERVICE_MEDECIN`,
-                                    fontSize: 13,
-                                    colSpan: 4,
-                                    border: [false, true, true, false]
-                                }, {}, {}, {}
-                            ],
-                            listActes(fakeActes)[0]
-                        ]
+                        widths: [100, 120, 60, 40, 50, 70],
+                        body: getContent(data)
                     }
                 }
             ]
         }
 
         var pdfDoc = printer.createPdfKitDocument(docDefinition);
-        pdfDoc.pipe(fs.createWriteStream(path.join(path.resolve('pdfs'), 'bill.pdf' )));
-        pdfDoc.end();
+        return pdfDoc;
 
     } catch (error) {
         if(process.env.CONTEXT_EXEC === 'development'){
@@ -128,115 +52,207 @@ const generateFacture = async (data = {}) =>{
     }
 }
 
-//just for test
-const fakeActes = [
-    {
-        date: '12/03/2023',
-        nomTarif: "Examen URO-ges",
-        pu: 2300,
-        qte: 2,
-        tva: 0,
-        total: 4600
-    },
-    {
-        date: '10/03/2024',
-        nomTarif: "Radiologie thorax",
-        pu: 7000,
-        qte: 1,
-        tva: 0,
-        total: 7000
-    },
-    {
-        date: '22/04/2024',
-        nomTarif: "Examen URO-ges",
-        pu: 2300,
-        qte: 1,
-        tva: 0,
-        total: 2300
-    },
-    {
-        date: '07/12/2023',
-        nomTarif: "Examen uro-gastrique",
-        pu: 4000,
-        qte: 1,
-        tva: 0,
-        total: 4000
-    }
-]
+//make pdf template function
+// Input: an object with all data from database
+// Output: an array @rows of lines to be print
+// 
+const getContent = (data) =>{
+    //rows to hold lines of text
+    let rows = [];
 
-const listActes = (actes = []) =>{
-    let actesRows = [];
-    actesRows.push([
+    rows.push([
+        {
+            text: 'HOPITAL  GENERAL  DE  DOUALA',
+            fontSize: 13,
+            colSpan: 3,
+            border: [true, true, true, false]
+        },
+        {}, 
+        {},
+        {
+            text: `${data.LIBRGLT || ''}`,
+            fontSize: 13,
+            bold: true,
+            alignment: 'center',
+            colSpan: 3,
+            rowSpan: 2,
+            border: [true, true, true, true]
+        },
+        {},
+        {},
+        
+    ]);
+    rows.push([
+        {
+            text: 'BP: 4856  DOUALA, CAMEROUN',
+            fontSize: 13,
+            colSpan: 3,
+            border: [true, false, false, true]
+        }, {}, {}, {}, {}, {}
+    ]);
+    rows.push([
+        {
+            text: `Facture du `,
+            fontSize: 13,
+            border: [true, true, false, true]
+        }, {
+            text: `${data.dateImpression || ""}`,
+            fontSize: 13,
+            bold: true,
+            colSpan: 2,
+            border: [false, true, false, false]
+        }, {},
+        {
+            text: `A`,
+            fontSize: 13,
+            border: [false, true, false, false] 
+        }, {
+            text: ` ${data.heureImpression || ""}`,
+            fontSize: 13,
+            bold: true,
+            colSpan: 2,
+            border: [false, true, true, false]
+        }, {}
+    ]);
+    rows.push([
+        {
+            text: `D0SSIER No: `,
+            fontSize: 13,
+            colSpan: 2,
+            border: [true, true, false, false]
+        },
+        {},
+        {
+            text: `${data.NUMDOS || ""}`,
+            fontSize: 13,
+            alignment: 'left',
+            bold: true,
+            colSpan: 4,
+            border: [false, true, true, false]
+        }, {}, {}, {}
+    ]);
+    rows.push([
+        {
+            text: `Entré(e) le`,
+            fontSize: 13,
+            colSpan: 2,
+            border: [true, false, false, false]
+        }, {},
+        {
+            text: `${data.DATEEH || ""}`,
+            fontSize: 13,
+            colSpan: 4,
+            bold: true,
+            border: [false, false, true, false]
+        }, {}, {}, {}
+    ]);
+    rows.push([
+        {
+            text: `Sorti(e) le`,
+            fontSize: 13,
+            colSpan: 2,
+            alignment: 'left',
+            border: [true, false, false, true]
+        },{},
+        {
+            text: `${data.DATESH || ""}`,
+            fontSize: 13,
+            bold: true,
+            alignment: 'left',
+            colSpan: 4,
+            border: [false, false, true, true]
+        }, {}, {}, {}
+    ]);
+    rows.push([
+        {
+            text: `MEDECIN `,
+            fontSize: 13,
+            colSpan: 2,
+            border: [true, true, false, true]
+        }, {},
+        {
+            text: `\t SERVICE_MEDECIN`,
+            fontSize: 13,
+            colSpan: 4,
+            border: [false, true, true, true]
+        }, {}, {}, {}
+    ])
+    rows.push([
         {
             text: `Date`,
+            bold: true,
             fontSize: 13,
             //border: [false, false, false, false]
         },
        {
             text: `Actes`,
+            bold: true,
+            alignment: 'center',
             fontSize: 13,
             //border: [false, false, false, false]
        }, 
         {
             text: `P.U`,
+            bold: true,
+            alignment: 'center',
             fontSize: 13,
             //border: [false, false, false, false]
         }, 
         {
             text: `Qté`,
+            bold: true,
+            alignment: 'center',
             fontSize: 13,
             //border: [false, false, false, false]
         },
         {
             text: `TVA`,
+            bold: true,
+            alignment: 'center',
             fontSize: 13,
             //border: [false, false, false, false]
         },
         {
             text: `TOTAL`,
+            bold: true,
+            alignment: 'center',
             fontSize: 13,
             //border: [false, false, false, false]
         } 
     ]);
 
-  actes.forEach(acte =>{
+    data.actes.forEach(acte =>{
       const row =  [
             {
-                text: `${acte.date}`,
-                fontSize: 13,
-                //border: [false, false, false, false]
+                text: `${Utils.getGivingDateInDDMMYYYY(acte.DATEFR)}`,
+                fontSize: 13
             },
             {
-                text: `${acte.nomTarif}`,
-                fontSize: 13,
-                //border: [false, false, false, false]
+                text: `${acte.NOMTARIF}`,
+                fontSize: 13
             }, 
             {
-                text: `${acte.pu}`,
-                fontSize: 13,
-                //border: [false, false, false, false]
+                text: `${acte.PU}`,
+                fontSize: 13
             }, 
             {
-                text: `${acte.qte}`,
-                fontSize: 13,
-                //border: [false, false, false, false]
+                text: `${acte.QTEFR}`,
+                fontSize: 13
             },
             {
-                text: `${acte.tva}`,
-                fontSize: 13,
-                //border: [false, false, false, false]
+                text: `${acte.TAUXBPC}`,
+                fontSize: 13
             },
             {
-                text: `${acte.total}`,
-                fontSize: 13,
-                //border: [false, false, false, false]
+                text: `${acte.TT_PAT}`,
+                fontSize: 13
             } 
         ];
 
-        actesRows.push(row)
+        rows.push(row)
     });
 
-    return actesRows
+    return rows;
 }
 
 module.exports = generateFacture;

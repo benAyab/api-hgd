@@ -1,5 +1,6 @@
 'use strict'
 const JWT = require('jsonwebtoken');
+const appendToLog = require("../services/service.log");
 
 //generate token from user payload. Rteurns token if success || null if error
 exports.generateToken =  (data) =>{
@@ -14,6 +15,7 @@ exports.generateToken =  (data) =>{
         if(process.env.CONTEXT_EXEC === 'development'){
             console.log(error);
         }
+        appendToLog("[error] "+error.message);
         return null;
     }
 }
@@ -29,6 +31,24 @@ exports.verifyAndDecodeToken = (token) =>{
         if(process.env.CONTEXT_EXEC === 'development'){
             console.log(error);
         }
+        appendToLog("[error] "+error.message);
+        return null;
+    }
+}
+
+exports.generateRefreshToken = (data) =>{
+    try {
+        if(!data){
+            return null;
+        }
+
+        const refreshToken = JWT.sign(data, process.env.JWT_KEY, {expiresIn: "1d"})
+        return refreshToken;
+    } catch (error) {
+        if(process.env.CONTEXT_EXEC === 'development'){
+            console.log(error);
+        }
+        appendToLog("[error] "+error.message);
         return null;
     }
 }

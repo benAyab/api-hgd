@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-exports.validateRequestToPayInput = (data) => {
+exports.validateRequestToPayInput = (data = {}) => {
 
     const schema = Joi.object({
         amount: Joi.number()
@@ -9,7 +9,7 @@ exports.validateRequestToPayInput = (data) => {
 
         currency: Joi.string()
         .min(2)
-        .max(5)
+        .max(10)
         .required(),
 
         meanCode: Joi.string()
@@ -19,14 +19,11 @@ exports.validateRequestToPayInput = (data) => {
 
         paymentNumber: Joi.string()
         .min(9)
-        .max(15)
+        .max(9)
         .required(),
 
-        orderNumber: Joi.string()
-        .min(9)
-        .required(),
-
-        feesAmount: Joi.number()
+        numDossier: Joi.number()
+        .integer()
         .min(0)
         .required()
     });
