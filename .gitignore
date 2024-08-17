@@ -1,9 +1,0 @@
-node_modules/
-
-sessions/
-*.pem
-*.env
-*.txt
-*.log
-*.crypt
-*.crypt.sign
