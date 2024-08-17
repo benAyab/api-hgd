@@ -58,7 +58,7 @@ exports.auth = async (req, res) =>{
         const connectedUser = usersdb.findOne({login: login});
         if(connectedUser){
             if(connectedUser.isconnected){
-                return res.status(409).json({error: 'CONFLICT_USER_SESSION', message: "Une session est déjà ouverte pour cet utisateur, veuillez vous déconnecter avant de continuer"});
+                return res.status(409).json({error: 'CONFLICT_USER_SESSION', message: "Une session est déjà ouverte pour cet utilisateur, veuillez vous déconnecter avant de continuer"});
             }else{
                 connectedUser.isconnected = true;
                 usersdb.update(connectedUser);

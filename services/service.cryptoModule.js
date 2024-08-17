@@ -44,13 +44,13 @@ exports.generateKeyPairs = () =>{
 
 exports.getKeyAndIvKey = (hashAlgo, hashEncode) =>{
 
-    const key =             crypto
+    const key =  crypto
         .createHash(hashAlgo)
         .update(process.env.CIPHER_PASSPHRASE)
         .digest(hashEncode)
         .substring(0, 32);
 
-    const keyIv =             crypto
+    const keyIv = crypto
         .createHash(hashAlgo)
         .update(process.env.SECRET_IV)
         .digest(hashEncode)
@@ -66,15 +66,15 @@ exports.encryptFile = (pathTofile) =>{
                 reject(new Error("invalid file path or file dosn't exist"))
             }
     
-            const hashAlgo =        process.env.HASH_ALG;
-            const cryptAlgo =       process.env.ENCRYPTION_METHOD;
-            const hashEncode =      process.env.HASH_DIGEST_ENCODE;
-            const { key, keyIv } =  this.getKeyAndIvKey(hashAlgo, hashEncode);
-            const inputStream =     fs.createReadStream(pathTofile);
+            const hashAlgo          =           process.env.HASH_ALG;
+            const cryptAlgo         =           process.env.ENCRYPTION_METHOD;
+            const hashEncode        =           process.env.HASH_DIGEST_ENCODE;
+            const { key, keyIv }    =           this.getKeyAndIvKey(hashAlgo, hashEncode);
+            const inputStream       =           fs.createReadStream(pathTofile);
     
-            let allChunkData =      [];
+            let allChunkData        =           [];
             
-            const cipher =          crypto.createCipheriv(cryptAlgo, key, keyIv);
+            const cipher            =           crypto.createCipheriv(cryptAlgo, key, keyIv);
     
             inputStream.on('readable', () => {
                 let chunk;
@@ -86,20 +86,17 @@ exports.encryptFile = (pathTofile) =>{
             inputStream.on('end', () => {
                 
                 const buff = Buffer.concat(allChunkData);
+                const cryptedContent  = Buffer.concat( [cipher.update(buff), cipher.final()] ).toString("base64");
+
+                const fileNamecrpt          =    `${Utils.getDateInDDMMYYYY().replaceAll("/", "-")}_${Utils.getTimeNowInHHMMSS().replaceAll(":", "_")}`
+                const pathToEncryptedFile   =      path.join(path.resolve('logEvents'), `${fileNamecrpt}.crypt`);
     
-                const cryptedContent = Buffer.from(
-                    cipher.update(buff.toString("utf8"), 'utf8', hashEncode) + cipher.final(hashEncode)
-                ).toString('utf8');
-    
-                const fileNamecrpt =    `${Utils.getDateInDDMMYYYY().replaceAll("/", "-")}_${Utils.getTimeNowInHHMMSS().replaceAll(":", "_")}`
-                const pathToFile =      path.join(path.resolve('logEvents'), `${fileNamecrpt}.crypt`);
-    
-                fs.writeFileSync(pathToFile, cryptedContent, { encoding: 'utf8', flag: "w" });
-                resolve(pathTofile)
+                fs.writeFileSync(pathToEncryptedFile, cryptedContent, { encoding: "utf8", flag: "w" });
+                resolve(pathToEncryptedFile)
             });
     
         } catch (error) {
-            reject(error)
+            reject(error.message)
         }
     })
 }
@@ -110,15 +107,15 @@ exports.decryptfile = (pathTofile) =>{
             throw new Error("invalid file path or file dosn't exist");
         }
 
-        const hashAlgo =        process.env.HASH_ALG;
-        const cryptAlgo =       process.env.ENCRYPTION_METHOD;
-        const hashEncode =      process.env.HASH_DIGEST_ENCODE;
-        const { key, keyIv } =  this.getKeyAndIvKey(hashAlgo, hashEncode);
+        const hashAlgo          =           process.env.HASH_ALG;
+        const cryptAlgo         =           process.env.ENCRYPTION_METHOD;
+        const hashEncode        =           process.env.HASH_DIGEST_ENCODE;
+        const { key, keyIv }    =           this.getKeyAndIvKey(hashAlgo, hashEncode);
 
-        const inputStream =     fs.createReadStream(pathTofile);
+        const inputStream       =           fs.createReadStream(pathTofile);
 
-        let allChunks =         [];
-        const decipher =        crypto.createDecipheriv(cryptAlgo, key, keyIv)
+        let allChunks           =           [];
+        const decipher          =           crypto.createDecipheriv(cryptAlgo, key, keyIv);
 
         inputStream.on('readable', () => {
             let chunk;
@@ -128,11 +125,11 @@ exports.decryptfile = (pathTofile) =>{
         });
           
         inputStream.on('end', () => {
-            //const content = chunks.join('');
+            
             const buff = Buffer.concat(allChunks);
 
-            const deCryptedContent = decipher.update(buff.toString("utf8"), 'hex', "utf8") + decipher.final('utf8');
-
+            const deCryptedContent = decipher.update(buff.toString("utf8"), "base64",  "utf8") + decipher.final("utf8");
+            console.log(deCryptedContent);
         });
 
     } catch (error) {
@@ -141,69 +138,77 @@ exports.decryptfile = (pathTofile) =>{
 }
 
 exports.signEncrypted = (pathToEncryptedFile, pathToPrivateKey) =>{
-    try {
-        if(!fs.existsSync(pathToEncryptedFile) || !fs.existsSync(pathToPrivateKey)){
-            throw new Error("invalid params");
-        }
-        const privateKey = fs.readFileSync(pathToPrivateKey, {encoding: 'utf8', flag: "r"});
-        
-        const encryptedDataInputStream =        fs.createReadStream(pathToEncryptedFile);
-        const hashAlgo =                        process.env.HASH_ALG;
-        const hash =                            crypto.createHash(hashAlgo);
-
-        let hashedFileToSign;
-
-        encryptedDataInputStream.on('readable', () => {
-            let chunk;
-            while (null !== (chunk = encryptedDataInputStream.read())) {
-                hash.update(chunk);
+    return   new Promise((resolve, reject) =>{
+        try {
+            if(!fs.existsSync(pathToEncryptedFile) || !fs.existsSync(pathToPrivateKey)){
+                reject("invalid params");
             }
-        });
+            const privateKey                    =    fs.readFileSync(pathToPrivateKey, {encoding: 'utf8', flag: "r"});
+            const encryptedDataInputStream      =    fs.createReadStream(pathToEncryptedFile);
+            const hashAlgo                      =    process.env.HASH_ALG;
+            //const hash                          =    crypto.createHash(hashAlgo);
+            const sign                          =    crypto.createSign(hashAlgo);
+    
+            //let hashedFileToSign;
+    
+            encryptedDataInputStream.on('readable', () => {
+                let chunk;
+                while (null !== (chunk = encryptedDataInputStream.read())) {
+                    //hash.update(chunk);
+                    sign.update(chunk);
+                }
+            });
+    
+            encryptedDataInputStream.on("end", () =>{
+                //hashedFileToSign = hash.digest();
+                //sign.update(hashedFileToSign);
+                
+                sign.end();
+    
+                const signature                 =       sign.sign(crypto.createPrivateKey(privateKey));
+                const pathToSignature           =       `${pathToEncryptedFile}.sign`;
 
-        encryptedDataInputStream.on("end", () =>{
-            hashedFileToSign = hash.digest("hex");
-
-            const sign =  crypto.createSign(hashAlgo);
-            sign.update(hashedFileToSign, "hex");
-            sign.end();
-
-            const signature = sign.sign(privateKey);
-            fs.writeFileSync(`${pathToEncryptedFile}.sign`, signature.toString("hex"), { encoding: 'utf8', flag: "w" });
-        });
-
-    } catch (error) {
-        throw error
-    }
+                fs.writeFileSync(pathToSignature, signature.toString("base64"), { encoding: 'utf8', flag: "w" });
+                resolve(pathToSignature)
+            });
+    
+        } catch (error) {
+            reject(error)
+        }
+    })
 }
 
 exports.verifyDataIntegrity = (pathToEncryptedFile,  pathToSignatureFile, pathToPublicKey) =>{
     return new Promise((resolve, reject) =>{
         try {
-            reject(new Error("invalid params"))
-            const publicKey = fs.readFileSync(pathToPublicKey, {encoding: 'utf8', flag: "r"});
-            const signature =  fs.readFileSync(pathToSignatureFile, {encoding: 'utf8', flag: "r"});
+            if(!fs.existsSync(pathToEncryptedFile) || !fs.existsSync(pathToSignatureFile) || !fs.existsSync(pathToPublicKey)){
+                reject("invalid params");
+            }
+
+            const publicKey                 =           fs.readFileSync(pathToPublicKey, {encoding: 'utf8', flag: "r"});
+            const signature                 =           fs.readFileSync(pathToSignatureFile, {encoding: 'utf8', flag: "r"});
     
-            const encryptedDataInputStream =        fs.createReadStream(pathToEncryptedFile);
-            const hashAlgo =                        process.env.HASH_ALG;
-            const hash =                            crypto.createHash(hashAlgo);
+            const encryptedDataInputStream  =           fs.createReadStream(pathToEncryptedFile);
+            const hashAlgo                  =           process.env.HASH_ALG;
+            //const hash                    =           crypto.createHash(hashAlgo);
+            const verify                    =           crypto.createVerify(hashAlgo);
     
-            let hashedFileToSign;
+            //let hashedFileToSign;
     
             encryptedDataInputStream.on('readable', () => {
                 let chunk;
                 while (null !== (chunk = encryptedDataInputStream.read())) {
-                    hash.update(chunk);
+                    //hash.update(chunk);
+                    verify.update(chunk);
                 }
             });
     
             encryptedDataInputStream.on("end", () =>{
-                hashedFileToSign = hash.digest("hex");
-                const verify = crypto.createVerify(process.env.HASH_ALG);
-    
-                verify.update(hashedFileToSign, "hex");
+                //hashedFileToSign = hash.digest();
+                //verify.update(hashedFileToSign, "hex");
                 verify.end();
 
-                resolve(verify.verify(publicKey, signature))
+                resolve( verify.verify(crypto.createPublicKey(publicKey), signature, "base64"))
             });
     
         } catch (error) {

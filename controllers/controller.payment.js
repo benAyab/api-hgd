@@ -40,7 +40,7 @@ exports.initPayment = async (req, res) => {
             return res.status(401).json({error: "ACCES_DENIED", message: "Echec d'authentification"});
         }
 
-        let fileEventContent = `TIMESTAMP: ${new Date()}\nTYPE: APPLICATION\nCALLER: ${req.login}\n`;
+        let fileEventContent = `TIMESTAMP: ${new Date().toISOString()}\nTYPE: APPLICATION\nCALLER: ${req.login}\n`;
         fileEventContent += `ORIGIN: ${req.hostname}\nFULL_URL:${req.originalUrl}\nTARGET: ${req.path}\nHEADER: ${JSON.stringify(req.headers)}\nPARAMS: ${JSON.stringify(req.query)}\n`;
         fileEventContent += `DATA: ${JSON.stringify(req.body)}\n`
 
@@ -67,11 +67,108 @@ exports.initPayment = async (req, res) => {
 
         //here we check if there is any initialised previous transaction
         const lastInitiatedTransaction = await checkAndGetLastTransaction(req.body.numDossier);
+        appendToLog("[info] Vérification de transaction précédente encours...");
 
-        console.log("Last init trx: ", lastInitiatedTransaction);
+        const result = await adwapayService.getADToken();
 
         if(lastInitiatedTransaction && Array.isArray(lastInitiatedTransaction) && lastInitiatedTransaction.length > 0){
+            appendToLog("[info] Transaction précédente trouvée...");
             
+            const checkStatusResult = await adwapayService.getStatus({meanCode: lastInitiatedTransaction[0].PAYMENT_MEAN, adpFootprint: lastInitiatedTransaction[0].FOOTPRINT}, result.data.tokenCode);
+            
+            if(!checkStatusResult.data || checkStatusResult.pesake.code !== "" || checkStatusResult.data.status === "C" || checkStatusResult.data.status === "X" || checkStatusResult.data.status === "O"){
+                
+                fileEventContent += `RESPONSE: ${JSON.stringify({error: 'PAYMENT_FAILED', message: "Transaction précédent échouée"})}`;
+                appendEventsToLog(fileEventContent);
+
+                appendToLog(`[error] Echec de payement. Raison:  ${checkStatusResult.pesake.code !== "" ? checkStatusResult.pesake.code +" " +checkStatusResult.pesake.detail : "Status: "+checkStatusResult.data.status}`);
+                
+                //if transaction failed for any reason set set updte sattus to E = "Echec" in french [failed]
+                const updateRGLTDigital = `UPDATE ${process.env.DB_USER}.GHRGLTDETDIGI SET STATE = :etat WHERE NUMRGLT = :numRglt`;
+                connection = await oracledb.getConnection(dbConfig);
+
+                //update last pending payment state to "E = echec"
+                await connection.execute(updateRGLTDigital,
+                    { etat: "E", numRglt:  lastInitiatedTransaction[0].NUMRGLT},
+                    { outFormat: oracledb.OUT_FORMAT_OBJECT, autoCommit: true}
+                );
+
+                return res.status(400).json({error: 'PAYMENT_FAILED', message: "Un payement précédent pour ce dossier a échoué, veuillez recommencer le payement"});
+
+            } else if(checkStatusResult.data.status === "T"){
+
+                const nompat = `${detaiDosResult.rows[0].NOMPAT? detaiDosResult.rows[0].NOMPAT : ""} ${detaiDosResult.rows[0].PREPAT? detaiDosResult.rows[0].PREPAT : ""}`;
+                const type = `${(detaiDosResult.rows[0].TAUXSEJ > 0 || detaiDosResult.rows[0].TAUXHON > 0)? "RC" : "AV"}`
+                //when transaction succeed
+                // insert transaction in database and then return
+                const inserRGLT = `INSERT INTO ${process.env.DB_USER}.ghrgltdet(CDOS, NUMDOS, NUMRGLT, DATERGLT, MNTREG, TYPERGLT, ETAT, LIBRGLT, TYPE, QTP, DATECREA, CODUTI, IMP, NBRE) VALUES(:cdos, :numdos, :numrglt, :daterglt, :mntreg, :typerglt, :etat, :librglt, :type, :qtp, :datcrea, :coduti, :imp, :nbre)`;
+        
+                //OK
+                const detDetail = {
+                    amount: lastInitiatedTransaction[0].MNTREG,
+                    numDossier: req.body.numDossier,
+                    payerNumber: lastInitiatedTransaction[0].PAYER_NUMBER,
+                    numrglt: lastInitiatedTransaction[0].NUMRGLT,
+                    dateDuJr: new Date() //`${Utils.getDateInDDMMYYYY()}`
+                }
+
+                connection = await oracledb.getConnection(dbConfig);
+                
+                await connection.execute(inserRGLT,
+                    {   
+                        cdos: '01',
+                        numdos: detDetail.numDossier,
+                        numrglt: detDetail.numrglt,
+                        daterglt: detDetail.dateDuJr,
+                        mntreg: detDetail.amount,
+                        typerglt: "DIG",
+                        etat: "E",
+                        librglt: nompat,
+                        type: type,
+                        qtp: null,
+                        datcrea: detDetail.dateDuJr,
+                        coduti: `${req.login}`,
+                        imp: `${type ==="AV"? "N":""}`,
+                        nbre: `${type === "AV"? 0:""}`
+                    },
+                    { outFormat: oracledb.OUT_FORMAT_OBJECT, autoCommit: true}  // object format
+                );
+
+                //OK
+                if(detaiDosResult.rows[0].CATDOS == "3" || detaiDosResult.rows[0].CATDOS == "4"){
+                    const updateDossierSQL = `UPDATE ${process.env.DB_USER}.ghdossier SET ETAT = :etat WHERE NUMDOS = :numdos`;
+
+                    await connection.execute(updateDossierSQL,
+                        { etat: "A", numdos: detDetail.numDossier },
+                        { outFormat: oracledb.OUT_FORMAT_OBJECT, autoCommit: true}
+                    )
+                }
+
+                //if transaction is validated by client set status to S "Succes"
+                const updateRGLTDigital = `UPDATE ${process.env.DB_USER}.GHRGLTDETDIGI SET STATE = :etat WHERE NUMRGLT = :numRglt`;
+                await connection.execute(updateRGLTDigital,
+                    { etat: "S", numRglt:  detDetail.numrglt},
+                    { outFormat: oracledb.OUT_FORMAT_OBJECT, autoCommit: true}
+                )
+
+                const data = {
+                    numDossier: req.body.numDossier,
+                    numRGLT: detDetail.numrglt,
+                    status: "SUCCES",
+                    paymentNumber: detDetail.payerNumber,
+                    amount: detDetail.amount,
+                    adpFootprint: checkStatusResult.data.adpFootprint
+                }
+                appendToLog("[info] Transaction précédente confirmée");
+
+                //loging events
+                fileEventContent += `RESPONSE: ${JSON.stringify({ data })}`;
+                appendEventsToLog(fileEventContent);
+
+                return res.status(200).json({ data });
+            }else{
+                return res.status(400).json({error: 'PENDING_PAYMENT', message: "Une Transaction précédente pour ce dossier est en cours, veuillez attendre quelques instants et recommencer le paiement"}); 
+            }
         }
 
         appendToLog("[info] Initialisation de payement...");
@@ -85,7 +182,7 @@ exports.initPayment = async (req, res) => {
             "orderNumber": orderNumber,
             "feesAmount": 0
         }
-        const result = await adwapayService.getADToken();
+
 
         const requestToPayResult = await adwapayService.makePayment(reqOpt, result.data.tokenCode);
 
@@ -110,7 +207,7 @@ exports.initPayment = async (req, res) => {
             return res.status(404).json({error: 'ADWAPAY_ERROR', message: requestToPayResult.data?.pesake?.detail});
         }
 
-        if(requestToPayResult.data.data.status && requestToPayResult.data.data.status == "O" && requestToPayResult.data.data.description && requestToPayResult.data.data.description == "PAYEE_NOT_FOUND'"){
+        if(requestToPayResult.data.data.status && requestToPayResult.data.data.status == "O" && requestToPayResult.data.data.description){
             fileEventContent += `RESPONSE: ${JSON.stringify({error: 'ADWAPAY_ERROR', message: "Le Numéro du payeur n'a pas de compte"})}`;
             appendEventsToLog(fileEventContent);
             
@@ -202,7 +299,7 @@ exports.initPayment = async (req, res) => {
                     { outFormat: oracledb.OUT_FORMAT_OBJECT, autoCommit: true}  // object format
                 );
 
-                if(detaiDosResult.rows[0].CATDOS === "3" || detaiDosResult.rows[0].CATDOS === "4"){
+                if(detaiDosResult.rows[0].CATDOS == "3" || detaiDosResult.rows[0].CATDOS == "4"){
                     const updateDossierSQL = `UPDATE ${process.env.DB_USER}.ghdossier SET ETAT = :etat WHERE NUMDOS = :numdos`;
 
                     await connection.execute(updateDossierSQL,
